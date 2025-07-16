@@ -1,0 +1,18 @@
+├── servers/
+│   ├── __init__.py
+│   ├── smtp_server.py
+│   ├── pop3_server.py
+│   └── imap_server.py
+├── clients/
+│   ├── __init__.py
+│   ├── smtp_client.py
+│   ├── pop3_client.py
+│   └── imap_client.py
+├── data/
+│   ├── __init__.py
+│   └── email_db.py  # Módulo para interactuar con la base de datos (SQLite)
+├── utils/
+│   ├── __init__.py
+│   └── email_parser.py # Funciones utilitarias para parsear emails, etc.
+├── main_app.py      # Script principal para lanzar clientes/servidores
+└── README.md        # Documentación del proyecto
