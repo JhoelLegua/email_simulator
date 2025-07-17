@@ -11,6 +11,11 @@
 - 📂 Servidor IMAP para la gestión de correos en el servidor
 - 🗄️ Base de datos **PostgreSQL** para almacenamiento persistente
 - 💻 Interfaz de línea de comandos intuitiva y amigable
+- 📚 Documentación web interactiva para cada protocolo:
+  - 🔍 Explicaciones detalladas y ejemplos
+  - 🎯 Demostraciones interactivas en vivo
+  - 📊 Diagramas de flujo y comparativas
+  - 💡 Tips y mejores prácticas
 
 ---
 
@@ -18,6 +23,7 @@
 
 - Python 3.x
 - PostgreSQL instalado y corriendo
+- Navegador web moderno para la documentación interactiva
 - Instalar dependencias:
   ```bash
   pip install -r requirements.txt
@@ -40,7 +46,13 @@
 ├── data/            # Gestión de datos
 │   └── email_db.py  # Base de datos PostgreSQL
 ├── utils/           # Utilidades
-│   └── email_parser.py
+│   ├── email_parser.py
+│   └── http_handler.py  # Manejador de respuestas HTTP
+├── view/            # Documentación web interactiva
+│   ├── smtp.html    # Documentación SMTP
+│   ├── pop3.html    # Documentación POP3
+│   ├── imap.html    # Documentación IMAP
+│   └── global.css   # Estilos compartidos
 ├── main_app.py      # Script principal
 ├── ver_correos_bd.py # Visualización directa de la BD
 └── README.md
@@ -54,6 +66,12 @@ Los servidores utilizan los siguientes puertos por defecto:
 - 📤 SMTP: localhost:1025
 - 📬 POP3: localhost:1100
 - 📑 IMAP: localhost:1430
+- 📚 Documentación Web: localhost:5000
+
+La documentación web está disponible en:
+- 📖 SMTP: http://localhost:5000/smtp
+- 📖 POP3: http://localhost:5000/pop3
+- 📖 IMAP: http://localhost:5000/imap
 
 ---
 
@@ -126,18 +144,33 @@ juan
 - Puerto 1025
 - Simula el envío de correos
 - No requiere autenticación en esta versión
+- Documentación web interactiva con:
+  - Diagrama de flujo del protocolo
+  - Ejemplos de comandos y respuestas
+  - Demo interactiva de envío
+  - Guía de códigos de respuesta
 
 ### 📥 POP3 (Post Office Protocol v3)
 - Puerto 1100
 - Permite descargar correos
 - Autenticación simulada (acepta cualquier credencial)
 - Soporta eliminación de correos
+- Documentación web interactiva con:
+  - Ciclo de vida de una sesión POP3
+  - Comandos esenciales explicados
+  - Simulador de sesión POP3
+  - Tips de uso y limitaciones
 
 ### 📂 IMAP (Internet Message Access Protocol)
 - Puerto 1430
 - Gestión de correos en el servidor
 - Autenticación simulada
 - Soporte para marcar correos como leídos
+- Documentación web interactiva con:
+  - Estructura de carpetas IMAP
+  - Comandos avanzados con ejemplos
+  - Comparativa detallada con POP3
+  - Demo interactiva de gestión de correos
 
 ---
 
