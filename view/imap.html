@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protocolo IMAP - Servidor de Correo</title>
+    <link rel="stylesheet" href="static/global.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Protocolo IMAP (Internet Message Access Protocol)</h1>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="openTab('overview')">Descripción General</button>
+            <button class="tab" onclick="openTab('details')">Detalles Técnicos</button>
+            <button class="tab" onclick="openTab('examples')">Ejemplos</button>
+            <button class="tab" onclick="openTab('interactive')">Demo Interactiva</button>
+        </div>
+
+        <div id="overview" class="tab-content active">
+            <div class="protocol-info">
+                <h2>¿Qué es IMAP?</h2>
+                <p>IMAP (Internet Message Access Protocol) es un protocolo avanzado de correo electrónico que permite gestionar y sincronizar mensajes entre múltiples dispositivos manteniendo una copia en el servidor. A diferencia de POP3, IMAP está diseñado para mantener el correo en el servidor y permitir el acceso desde cualquier lugar.</p>
+            </div>
+
+            <div class="tip">
+                <h3>Ventajas Principales de IMAP</h3>
+                <ul>
+                    <li>Sincronización en tiempo real entre dispositivos</li>
+                    <li>Acceso a correos desde cualquier lugar</li>
+                    <li>Gestión eficiente del espacio local</li>
+                    <li>Soporte para múltiples carpetas y etiquetas</li>
+                    <li>Búsqueda en el servidor</li>
+                </ul>
+            </div>
+
+            <div class="flowchart">
+                <h3>Estructura de Carpetas IMAP</h3>
+                <pre class="command">
+INBOX
+├── Enviados
+├── Borradores
+├── Spam
+└── Carpetas Personalizadas
+    ├── Trabajo
+    ├── Familia
+    └── Proyectos
+                </pre>
+            </div>
+        </div>
+
+        <div id="details" class="tab-content">
+            <h2>Comandos IMAP Fundamentales</h2>
+            <div class="example-box">
+                <h3>Autenticación</h3>
+                <div class="command">
+                    LOGIN usuario contraseña
+                    <button class="copy-btn" onclick="copyCommand(this)">Copiar</button>
+                </div>
+
+                <h3>Selección de Buzón</h3>
+                <div class="command">
+                    SELECT INBOX
+                    <button class="copy-btn" onclick="copyCommand(this)">Copiar</button>
+                </div>
+
+                <h3>Operaciones con Mensajes</h3>
+                <div class="command">
+                    FETCH 1:* (FLAGS BODY[HEADER])
+                    <button class="copy-btn" onclick="copyCommand(this)">Copiar</button>
+                </div>
+                <p>Obtiene encabezados y banderas de todos los mensajes</p>
+
+                <div class="command">
+                    STORE 1 +FLAGS (\Seen)
+                    <button class="copy-btn" onclick="copyCommand(this)">Copiar</button>
+                </div>
+                <p>Marca un mensaje como leído</p>
+            </div>
+
+            <h2>Características Avanzadas</h2>
+            <ul>
+                <li><strong>FLAGS</strong> - Gestión de estados de mensajes</li>
+                <li><strong>IDLE</strong> - Notificaciones en tiempo real</li>
+                <li><strong>SEARCH</strong> - Búsqueda avanzada en servidor</li>
+                <li><strong>APPEND</strong> - Añadir mensajes a carpetas</li>
+            </ul>
+
+            <div class="note">
+                <h3>Diferencias con POP3</h3>
+                <table style="width: 100%; margin-top: 10px; border-collapse: collapse;">
+                    <tr style="background: #f8f9fa;">
+                        <th style="padding: 8px; border: 1px solid #ddd;">Característica</th>
+                        <th style="padding: 8px; border: 1px solid #ddd;">IMAP</th>
+                        <th style="padding: 8px; border: 1px solid #ddd;">POP3</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid #ddd;">Almacenamiento</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">Servidor</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">Cliente</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid #ddd;">Sincronización</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">Sí</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">No</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid #ddd;">Múltiples carpetas</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">Sí</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">No</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid #ddd;">Búsqueda en servidor</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">Sí</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">No</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div id="examples" class="tab-content">
+            <h2>Ejemplo de Sesión IMAP</h2>
+            <div class="example-box">
+                <pre class="command">
+C: * OK IMAP4rev1 Servidor listo
+C: a001 LOGIN usuario@dominio.com contraseña
+S: a001 OK LOGIN completado
+C: a002 SELECT INBOX
+S: * 2 EXISTS
+S: * 0 RECENT
+S: a002 OK [READ-WRITE] SELECT completado
+C: a003 FETCH 1:* (FLAGS BODY[HEADER.FIELDS (DATE FROM SUBJECT)])
+S: * 1 FETCH (...)
+S: * 2 FETCH (...)
+S: a003 OK FETCH completado
+C: a004 LOGOUT
+S: * BYE IMAP4rev1 Servidor cerrando conexión
+S: a004 OK LOGOUT completado
+                </pre>
+            </div>
+
+            <div class="warning">
+                <h3>Consideraciones de Rendimiento</h3>
+                <ul>
+                    <li>IMAP consume más recursos del servidor</li>
+                    <li>Requiere conexión permanente</li>
+                    <li>Mayor uso de ancho de banda</li>
+                    <li>Necesita más espacio en servidor</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="interactive" class="tab-content">
+            <h2>Demo Interactiva IMAP</h2>
+            <div class="interactive-demo">
+                <input type="text" id="imapUsername" class="demo-input" placeholder="Usuario: usuario@dominio.com">
+                <input type="password" id="imapPassword" class="demo-input" placeholder="Contraseña">
+                <select id="imapFolder" class="demo-input">
+                    <option value="INBOX">INBOX</option>
+                    <option value="Sent">Enviados</option>
+                    <option value="Drafts">Borradores</option>
+                    <option value="Trash">Papelera</option>
+                </select>
+                <button class="demo-button" onclick="simulateIMAP()">Simular Sesión IMAP</button>
+                <div id="imapOutput" class="demo-output"></div>
+            </div>
+        </div>
+
+        <div class="port-info">
+            Puerto del servidor IMAP en este simulador: 1430
+        </div>
+    </div>
+
+    <script>
+        function openTab(tabName) {
+            const tabs = document.getElementsByClassName('tab');
+            const contents = document.getElementsByClassName('tab-content');
+            
+            for (let tab of tabs) {
+                tab.classList.remove('active');
+            }
+            for (let content of contents) {
+                content.classList.remove('active');
+            }
+            
+            event.currentTarget.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        function copyCommand(button) {
+            const command = button.parentElement.textContent.trim();
+            navigator.clipboard.writeText(command).then(() => {
+                const originalText = button.textContent;
+                button.textContent = '¡Copiado!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        function simulateIMAP() {
+            const username = document.getElementById('imapUsername').value || 'usuario@dominio.com';
+            const folder = document.getElementById('imapFolder').value;
+            const output = document.getElementById('imapOutput');
+            const tag = 'a001';
+            
+            output.innerHTML = `S: * OK IMAP4rev1 Servidor listo\n`;
+            
+            setTimeout(() => output.innerHTML += `C: ${tag} LOGIN ${username} ********\n`, 500);
+            setTimeout(() => output.innerHTML += `S: ${tag} OK LOGIN completado\n`, 1000);
+            setTimeout(() => output.innerHTML += `C: a002 SELECT ${folder}\n`, 1500);
+            setTimeout(() => output.innerHTML += `S: * 2 EXISTS
+S: * 0 RECENT
+S: * OK [UIDVALIDITY 1234567890]
+S: a002 OK [READ-WRITE] SELECT completado\n`, 2000);
+            setTimeout(() => output.innerHTML += `C: a003 FETCH 1:* (FLAGS BODY[HEADER.FIELDS (DATE FROM SUBJECT)])\n`, 2500);
+            setTimeout(() => output.innerHTML += `S: * 1 FETCH (FLAGS (\\Seen) BODY[HEADER.FIELDS (DATE FROM SUBJECT)] {120}
+Date: Wed, 16 Jul 2025 10:00:00 +0000
+From: sender1@example.com
+Subject: Primer mensaje de prueba
+
+S: * 2 FETCH (FLAGS (\\Recent) BODY[HEADER.FIELDS (DATE FROM SUBJECT)] {125}
+Date: Wed, 16 Jul 2025 11:00:00 +0000
+From: sender2@example.com
+Subject: Segundo mensaje de prueba
+
+S: a003 OK FETCH completado\n`, 3000);
+            setTimeout(() => output.innerHTML += `C: a004 LOGOUT\nS: * BYE IMAP4rev1 Servidor cerrando conexión\nS: a004 OK LOGOUT completado\n`, 3500);
+        }
+    </script>
+</body>
+</html>

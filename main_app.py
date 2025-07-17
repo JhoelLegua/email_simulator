@@ -3,9 +3,34 @@ import sys
 import time
 import subprocess
 from threading import Thread
+from flask import Flask, send_from_directory
 
 # Añadir el directorio raíz al path para poder importar los módulos
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+# Configuración de Flask
+app = Flask(__name__, static_url_path='/static')
+app.static_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'view')
+
+@app.route('/static/<path:path>')
+def send_static(path):
+    return send_from_directory(app.static_folder, path)
+
+@app.route('/smtp')
+def smtp_info():
+    return send_from_directory('view', 'smtp.html')
+
+@app.route('/pop3')
+def pop3_info():
+    return send_from_directory('view', 'pop3.html')
+
+@app.route('/imap')
+def imap_info():
+    return send_from_directory('view', 'imap.html')
+
+# Función para iniciar el servidor Flask
+def start_flask_server():
+    app.run(port=5000, threaded=True)
 
 from servers.smtp_server import start_server as start_smtp_server
 from servers.pop3_server import start_server as start_pop3_server
@@ -32,6 +57,7 @@ def main():
     servers = []
     server_threads = []
     servers_running = False
+    flask_thread = None
     
     while True:
         clear_screen()
@@ -56,11 +82,20 @@ def main():
                 servers.append(imap_server)
                 server_threads.append(imap_thread)
                 
+                # Iniciar servidor de documentación (opcional)
+                flask_thread = Thread(target=start_flask_server)
+                flask_thread.daemon = True
+                flask_thread.start()
+                
                 servers_running = True
                 print("\nTodos los servidores están en ejecución:")
                 print("- SMTP: localhost:1025")
                 print("- POP3: localhost:1100")
                 print("- IMAP: localhost:1430")
+                print("\nDocumentación disponible en:")
+                print("- http://localhost:5000/smtp")
+                print("- http://localhost:5000/pop3")
+                print("- http://localhost:5000/imap")
                 input("\nPresione Enter para continuar...")
                 
             except Exception as e:

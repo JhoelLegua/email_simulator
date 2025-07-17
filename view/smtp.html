@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protocolo SMTP - Servidor de Correo</title>
+    <link rel="stylesheet" href="static/global.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Protocolo SMTP (Simple Mail Transfer Protocol)</h1>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="openTab('overview')">Descripción General</button>
+            <button class="tab" onclick="openTab('details')">Detalles Técnicos</button>
+            <button class="tab" onclick="openTab('examples')">Ejemplos</button>
+            <button class="tab" onclick="openTab('interactive')">Demo Interactiva</button>
+        </div>
+
+        <div id="overview" class="tab-content active">
+            <div class="protocol-info">
+                <h2>¿Qué es SMTP?</h2>
+                <p>SMTP (Simple Mail Transfer Protocol) es el protocolo estándar de Internet para el envío de correos electrónicos. Desarrollado inicialmente en 1982, SMTP se ha convertido en el estándar global para la transmisión de correos electrónicos entre servidores.</p>
+            </div>
+
+            <h2>Características Principales</h2>
+            <ul>
+                <li>Protocolo orientado a texto basado en comandos ASCII</li>
+                <li>Opera por defecto en el puerto 25 (o 587 para SMTP con TLS)</li>
+                <li>Soporta autenticación y cifrado</li>
+                <li>Permite el envío de correos con adjuntos mediante MIME</li>
+                <li>Funciona sobre TCP/IP</li>
+            </ul>
+
+            <div class="flowchart">
+                <h3>Flujo de Envío de Correo</h3>
+                <pre class="command">
+Cliente SMTP -> Servidor SMTP: HELO/EHLO
+Servidor SMTP -> Cliente SMTP: 250 OK
+Cliente SMTP -> Servidor SMTP: MAIL FROM
+Servidor SMTP -> Cliente SMTP: 250 OK
+Cliente SMTP -> Servidor SMTP: RCPT TO
+Servidor SMTP -> Cliente SMTP: 250 OK
+Cliente SMTP -> Servidor SMTP: DATA
+Servidor SMTP -> Cliente SMTP: 354 Start mail input
+Cliente SMTP -> Servidor SMTP: Contenido del correo
+Servidor SMTP -> Cliente SMTP: 250 OK
+Cliente SMTP -> Servidor SMTP: QUIT
+Servidor SMTP -> Cliente SMTP: 221 Bye
+                </pre>
+            </div>
+        </div>
+
+        <div id="details" class="tab-content">
+            <h2>Comandos SMTP Básicos</h2>
+            <div class="example-box">
+                <div class="command">
+                    HELO/EHLO [dominio]
+                    <button class="copy-btn" onclick="copyCommand(this)">Copiar</button>
+                </div>
+                <p>Inicia la sesión SMTP e identifica al remitente</p>
+
+                <div class="command">
+                    MAIL FROM: &lt;remitente@dominio.com&gt;
+                    <button class="copy-btn" onclick="copyCommand(this)">Copiar</button>
+                </div>
+                <p>Especifica la dirección del remitente</p>
+
+                <div class="command">
+                    RCPT TO: &lt;destinatario@dominio.com&gt;
+                    <button class="copy-btn" onclick="copyCommand(this)">Copiar</button>
+                </div>
+                <p>Especifica la dirección del destinatario</p>
+
+                <div class="command">
+                    DATA
+                    ... contenido del mensaje ...
+                    .
+                    <button class="copy-btn" onclick="copyCommand(this)">Copiar</button>
+                </div>
+                <p>Inicia la transferencia del contenido del mensaje</p>
+            </div>
+
+            <h2>Códigos de Respuesta SMTP</h2>
+            <ul>
+                <li><strong>2xx</strong> - Éxito (250 OK)</li>
+                <li><strong>3xx</strong> - Comando aceptado, esperando más información</li>
+                <li><strong>4xx</strong> - Error temporal</li>
+                <li><strong>5xx</strong> - Error permanente</li>
+            </ul>
+
+            <div class="tip">
+                <h3>Extensiones SMTP Modernas</h3>
+                <ul>
+                    <li><strong>STARTTLS</strong> - Para cifrado TLS</li>
+                    <li><strong>AUTH</strong> - Para autenticación</li>
+                    <li><strong>SIZE</strong> - Para límites de tamaño de mensaje</li>
+                    <li><strong>8BITMIME</strong> - Para contenido de 8 bits</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="examples" class="tab-content">
+            <h2>Ejemplo de Sesión SMTP</h2>
+            <div class="example-box">
+                <pre class="command">
+S: 220 smtp.example.com ESMTP Postfix
+C: HELO cliente.example.com
+S: 250 Hello cliente.example.com
+C: MAIL FROM: &lt;sender@example.com&gt;
+S: 250 Ok
+C: RCPT TO: &lt;recipient@example.com&gt;
+S: 250 Ok
+C: DATA
+S: 354 End data with &lt;CR&gt;&lt;LF&gt;.&lt;CR&gt;&lt;LF&gt;
+C: From: "Remitente" &lt;sender@example.com&gt;
+C: To: "Destinatario" &lt;recipient@example.com&gt;
+C: Subject: Prueba de SMTP
+C:
+C: Este es un mensaje de prueba.
+C: .
+S: 250 Ok: queued as 12345
+C: QUIT
+S: 221 Bye
+                </pre>
+            </div>
+
+            <div class="note">
+                <h3>Nota Importante</h3>
+                <p>En este simulador, el servidor SMTP escucha en el puerto 1025 en lugar del puerto estándar 25, para permitir la ejecución sin privilegios de administrador.</p>
+            </div>
+
+            <div class="warning">
+                <h3>Consideraciones de Seguridad</h3>
+                <p>En un entorno de producción, siempre se recomienda:</p>
+                <ul>
+                    <li>Usar TLS para cifrar la comunicación</li>
+                    <li>Implementar autenticación</li>
+                    <li>Configurar registros SPF y DKIM</li>
+                    <li>Mantener listas blancas/negras de IPs</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="interactive" class="tab-content">
+            <h2>Demo Interactiva SMTP</h2>
+            <div class="interactive-demo">
+                <input type="text" id="fromEmail" class="demo-input" placeholder="From: sender@example.com">
+                <input type="text" id="toEmail" class="demo-input" placeholder="To: recipient@example.com">
+                <input type="text" id="subject" class="demo-input" placeholder="Subject: Test Message">
+                <textarea id="messageBody" class="demo-input" rows="5" placeholder="Message body..."></textarea>
+                <button class="demo-button" onclick="simulateSMTP()">Simular Envío SMTP</button>
+                <div id="smtpOutput" class="demo-output"></div>
+            </div>
+        </div>
+
+        <div class="port-info">
+            Puerto del servidor SMTP en este simulador: 1025
+        </div>
+    </div>
+
+    <script>
+        function openTab(tabName) {
+            const tabs = document.getElementsByClassName('tab');
+            const contents = document.getElementsByClassName('tab-content');
+            
+            for (let tab of tabs) {
+                tab.classList.remove('active');
+            }
+            for (let content of contents) {
+                content.classList.remove('active');
+            }
+            
+            event.currentTarget.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        function copyCommand(button) {
+            const command = button.parentElement.textContent.trim();
+            navigator.clipboard.writeText(command).then(() => {
+                const originalText = button.textContent;
+                button.textContent = '¡Copiado!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        function simulateSMTP() {
+            const from = document.getElementById('fromEmail').value;
+            const to = document.getElementById('toEmail').value;
+            const subject = document.getElementById('subject').value;
+            const body = document.getElementById('messageBody').value;
+
+            const output = document.getElementById('smtpOutput');
+            output.innerHTML = `S: 220 localhost ESMTP Simulator\n`;
+            
+            setTimeout(() => output.innerHTML += `C: HELO client.example.com\n`, 500);
+            setTimeout(() => output.innerHTML += `S: 250 Hello client.example.com\n`, 1000);
+            setTimeout(() => output.innerHTML += `C: MAIL FROM: <${from}>\n`, 1500);
+            setTimeout(() => output.innerHTML += `S: 250 Ok\n`, 2000);
+            setTimeout(() => output.innerHTML += `C: RCPT TO: <${to}>\n`, 2500);
+            setTimeout(() => output.innerHTML += `S: 250 Ok\n`, 3000);
+            setTimeout(() => output.innerHTML += `C: DATA\n`, 3500);
+            setTimeout(() => output.innerHTML += `S: 354 End data with <CR><LF>.<CR><LF>\n`, 4000);
+            setTimeout(() => output.innerHTML += `C: Subject: ${subject}\n`, 4500);
+            setTimeout(() => output.innerHTML += `C: \n${body}\n`, 5000);
+            setTimeout(() => output.innerHTML += `C: .\nS: 250 Ok: Message accepted\n`, 5500);
+            setTimeout(() => output.innerHTML += `C: QUIT\nS: 221 Bye\n`, 6000);
+        }
+    </script>
+</body>
+</html>

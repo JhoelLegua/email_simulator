@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protocolo POP3 - Servidor de Correo</title>
+    <link rel="stylesheet" href="static/global.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Protocolo POP3 (Post Office Protocol version 3)</h1>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="openTab('overview')">Descripción General</button>
+            <button class="tab" onclick="openTab('details')">Detalles Técnicos</button>
+            <button class="tab" onclick="openTab('examples')">Ejemplos</button>
+            <button class="tab" onclick="openTab('interactive')">Demo Interactiva</button>
+        </div>
+
+        <div id="overview" class="tab-content active">
+            <div class="protocol-info">
+                <h2>¿Qué es POP3?</h2>
+                <p>POP3 (Post Office Protocol version 3) es un protocolo estándar de Internet diseñado para la recuperación de correos electrónicos desde un servidor remoto a un cliente local. Es uno de los protocolos más antiguos y ampliamente utilizados para la descarga de correos.</p>
+            </div>
+
+            <h2>Características Principales</h2>
+            <ul>
+                <li>Descarga completa de mensajes al cliente local</li>
+                <li>Operación simple y directa</li>
+                <li>Ideal para conexiones intermitentes</li>
+                <li>Soporte para modo offline</li>
+                <li>Gestión de espacio en servidor</li>
+            </ul>
+
+            <div class="flowchart">
+                <h3>Ciclo de Vida de una Sesión POP3</h3>
+                <pre class="command">
+INICIO
+  ↓
+AUTORIZACIÓN
+  ↓
+TRANSACCIÓN
+  ↓
+ACTUALIZACIÓN
+  ↓
+FIN
+                </pre>
+            </div>
+        </div>
+
+        <div id="details" class="tab-content">
+            <h2>Comandos POP3 Esenciales</h2>
+            <div class="example-box">
+                <h3>Comandos de Autorización</h3>
+                <div class="command">
+                    USER nombre_usuario
+                    <button class="copy-btn" onclick="copyCommand(this)">Copiar</button>
+                </div>
+                <div class="command">
+                    PASS contraseña
+                    <button class="copy-btn" onclick="copyCommand(this)">Copiar</button>
+                </div>
+
+                <h3>Comandos de Transacción</h3>
+                <div class="command">
+                    LIST
+                    <button class="copy-btn" onclick="copyCommand(this)">Copiar</button>
+                </div>
+                <p>Muestra lista de mensajes y tamaños</p>
+
+                <div class="command">
+                    RETR n
+                    <button class="copy-btn" onclick="copyCommand(this)">Copiar</button>
+                </div>
+                <p>Recupera el mensaje número n</p>
+
+                <div class="command">
+                    DELE n
+                    <button class="copy-btn" onclick="copyCommand(this)">Copiar</button>
+                </div>
+                <p>Marca el mensaje n para eliminación</p>
+
+                <div class="command">
+                    QUIT
+                    <button class="copy-btn" onclick="copyCommand(this)">Copiar</button>
+                </div>
+                <p>Termina la sesión y aplica cambios</p>
+            </div>
+
+            <div class="tip">
+                <h3>Ventajas de POP3</h3>
+                <ul>
+                    <li>Eficiente en uso de recursos del servidor</li>
+                    <li>Perfecto para acceso desde un único dispositivo</li>
+                    <li>Funciona bien con conexiones lentas o inestables</li>
+                    <li>Permite trabajar sin conexión</li>
+                </ul>
+            </div>
+
+            <div class="warning">
+                <h3>Limitaciones</h3>
+                <ul>
+                    <li>No mantiene sincronización entre dispositivos</li>
+                    <li>Los mensajes se descargan completamente</li>
+                    <li>No soporta múltiples carpetas</li>
+                    <li>Menos flexible que IMAP</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="examples" class="tab-content">
+            <h2>Ejemplo de Sesión POP3</h2>
+            <div class="example-box">
+                <pre class="command">
+C: &lt;conexión al puerto POP3&gt;
+S: +OK Servidor POP3 listo
+C: USER usuario@dominio.com
+S: +OK
+C: PASS micontraseña
+S: +OK Buzón bloqueado y listo
+C: LIST
+S: +OK 2 mensajes (320 octetos)
+S: 1 120
+S: 2 200
+S: .
+C: RETR 1
+S: +OK 120 octetos
+S: &lt;contenido del mensaje 1&gt;
+S: .
+C: DELE 1
+S: +OK mensaje 1 eliminado
+C: QUIT
+S: +OK Servidor POP3 cerrando conexión
+                </pre>
+            </div>
+        </div>
+
+        <div id="interactive" class="tab-content">
+            <h2>Demo Interactiva POP3</h2>
+            <div class="interactive-demo">
+                <input type="text" id="username" class="demo-input" placeholder="Usuario: usuario@dominio.com">
+                <input type="password" id="password" class="demo-input" placeholder="Contraseña">
+                <button class="demo-button" onclick="simulatePOP3()">Simular Sesión POP3</button>
+                <div id="pop3Output" class="demo-output"></div>
+            </div>
+        </div>
+
+        <div class="port-info">
+            Puerto del servidor POP3 en este simulador: 1100
+        </div>
+    </div>
+
+    <script>
+        function openTab(tabName) {
+            const tabs = document.getElementsByClassName('tab');
+            const contents = document.getElementsByClassName('tab-content');
+            
+            for (let tab of tabs) {
+                tab.classList.remove('active');
+            }
+            for (let content of contents) {
+                content.classList.remove('active');
+            }
+            
+            event.currentTarget.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        function copyCommand(button) {
+            const command = button.parentElement.textContent.trim();
+            navigator.clipboard.writeText(command).then(() => {
+                const originalText = button.textContent;
+                button.textContent = '¡Copiado!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        function simulatePOP3() {
+            const username = document.getElementById('username').value || 'usuario@dominio.com';
+            const output = document.getElementById('pop3Output');
+            
+            output.innerHTML = `S: +OK Servidor POP3 listo\n`;
+            
+            setTimeout(() => output.innerHTML += `C: USER ${username}\n`, 500);
+            setTimeout(() => output.innerHTML += `S: +OK\n`, 1000);
+            setTimeout(() => output.innerHTML += `C: PASS ********\n`, 1500);
+            setTimeout(() => output.innerHTML += `S: +OK Buzón bloqueado y listo\n`, 2000);
+            setTimeout(() => output.innerHTML += `C: LIST\n`, 2500);
+            setTimeout(() => output.innerHTML += `S: +OK 2 mensajes (320 octetos)
+S: 1 120
+S: 2 200
+S: .\n`, 3000);
+            setTimeout(() => output.innerHTML += `C: RETR 1\n`, 3500);
+            setTimeout(() => output.innerHTML += `S: +OK 120 octetos
+From: sender@example.com
+To: ${username}
+Subject: Mensaje de prueba
+
+Este es un mensaje de ejemplo.
+.
+`, 4000);
+            setTimeout(() => output.innerHTML += `C: DELE 1\n`, 4500);
+            setTimeout(() => output.innerHTML += `S: +OK mensaje 1 eliminado\n`, 5000);
+            setTimeout(() => output.innerHTML += `C: QUIT\nS: +OK Servidor POP3 cerrando conexión\n`, 5500);
+        }
+    </script>
+</body>
+</html>
